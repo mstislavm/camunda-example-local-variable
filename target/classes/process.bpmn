@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0fr9mxs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.10.0">
+  <bpmn:process id="demo-process" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Запуск процесса">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="count" label="Число параллельных активностей" type="long" defaultValue="1" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_1u3tryy</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:subProcess id="Activity_0kacgqt">
+      <bpmn:incoming>Flow_1sh5ire</bpmn:incoming>
+      <bpmn:outgoing>Flow_1h3s3b6</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics camunda:asyncBefore="true" camunda:exclusive="false">
+        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">${ count }</bpmn:loopCardinality>
+      </bpmn:multiInstanceLoopCharacteristics>
+      <bpmn:startEvent id="Event_054tdfp">
+        <bpmn:outgoing>Flow_0vklus4</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_0vklus4" sourceRef="Event_054tdfp" targetRef="Activity_176actn" />
+      <bpmn:serviceTask id="Activity_176actn" name="Добавить результат" camunda:jobPriority="10" camunda:delegateExpression="${ updateResult }">
+        <bpmn:incoming>Flow_0vklus4</bpmn:incoming>
+        <bpmn:outgoing>Flow_1hxfubv</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:endEvent id="Event_04yiijq">
+        <bpmn:incoming>Flow_1hxfubv</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1hxfubv" sourceRef="Activity_176actn" targetRef="Event_04yiijq" />
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_1u3tryy" sourceRef="StartEvent_1" targetRef="Activity_1q2dybw" />
+    <bpmn:endEvent id="Event_1ob2uno" name="Результат выведен">
+      <bpmn:incoming>Flow_1h3s3b6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1h3s3b6" sourceRef="Activity_0kacgqt" targetRef="Event_1ob2uno" />
+    <bpmn:serviceTask id="Activity_1q2dybw" name="Создать пустую переменную result" camunda:delegateExpression="${ createResult }">
+      <bpmn:incoming>Flow_1u3tryy</bpmn:incoming>
+      <bpmn:outgoing>Flow_1sh5ire</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1sh5ire" sourceRef="Activity_1q2dybw" targetRef="Activity_0kacgqt" />
+  </bpmn:process>
+  <bpmn:error id="Error_1pdfd4i" name="BusinessError" errorCode="BusinessError" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="demo-process">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="182" y="159" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="157" y="202" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kacgqt_di" bpmnElement="Activity_0kacgqt" isExpanded="true">
+        <dc:Bounds x="510" y="77" width="360" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_054tdfp_di" bpmnElement="Event_054tdfp">
+        <dc:Bounds x="550" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1sazv5o_di" bpmnElement="Activity_176actn">
+        <dc:Bounds x="640" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_04yiijq_di" bpmnElement="Event_04yiijq">
+        <dc:Bounds x="802" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0vklus4_di" bpmnElement="Flow_0vklus4">
+        <di:waypoint x="586" y="177" />
+        <di:waypoint x="640" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1hxfubv_di" bpmnElement="Flow_1hxfubv">
+        <di:waypoint x="740" y="177" />
+        <di:waypoint x="802" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1ob2uno_di" bpmnElement="Event_1ob2uno">
+        <dc:Bounds x="1062" y="159" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1055" y="202" width="51" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0qx9hs3_di" bpmnElement="Activity_1q2dybw">
+        <dc:Bounds x="260" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1u3tryy_di" bpmnElement="Flow_1u3tryy">
+        <di:waypoint x="218" y="177" />
+        <di:waypoint x="260" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1h3s3b6_di" bpmnElement="Flow_1h3s3b6">
+        <di:waypoint x="870" y="177" />
+        <di:waypoint x="1062" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1sh5ire_di" bpmnElement="Flow_1sh5ire">
+        <di:waypoint x="360" y="177" />
+        <di:waypoint x="510" y="177" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
